@@ -13,19 +13,28 @@ Exams.Gui = class{
     this.$btnCreate.on("click", (e) => this.btnClickHandlerToShowCreateForm(e))
     this.$tbody.on("click", "[data-exams='btn-edit']", (e) => this.btnClickHandlerToShowEditForm(e))
     this.$modal.on('click', "[data-exam='btn-save']", (e) => this.btnClickHandlerToSaveExam(e))
+    this.$tbody.on("ajax:success", "[data-exams='btn-destroy']", (e) => this.responseSuccessHandler(e))
+    this.$tbody.on("ajax:error", "[data-exams='btn-destroy']", () => this.responseErrorHandler())
     this.$modal.on("ajax:success", 'form', (e) => this.responseSuccessHandler(e))
     this.$modal.on("ajax:error", 'form', (e) => this.responseErrorHandler())
     this.$modal.on("ajax:complete", 'form', (e) => this.responseCompleteHandler())
   }
 
   responseSuccessHandler(e){
-    let exam = new Exams.Exam(e.detail[0])
-    if($(`[data-exam-id="${exam.id}"]`).length > 0){
-      let tr = $(`[data-exam-id="${exam.id}"]`)
-      tr.after(this.examRow(exam))
+    let examData = e.detail[0]
+    let tr = $(`[data-exam-id="${examData.id}"]`)
+
+    if (examData.maxillary_depth_angle) {
+      let exam = new Exams.Exam(examData)
+
+      if (tr.length > 0) {
+        tr.after(this.examRow(exam))
+        tr.remove()
+      } else {
+        this.$tbody.append(this.examRow(exam))
+      }
+    } else {
       tr.remove()
-    }else{
-      this.$tbody.append(this.examRow(exam))
     }
   }
 
@@ -34,7 +43,7 @@ Exams.Gui = class{
   }
 
   responseErrorHandler(){
-    alert('Error on exam create/edit')
+    alert('Error on exam create/edit/destroy')
   }
 
   btnClickHandlerToShowEditForm(e){
@@ -69,7 +78,7 @@ Exams.Gui = class{
       <div class="float-right">
         <a class="btn btn-sm btn-secondary" href="/patients/${exam.patientId}/exams/${exam.id}">Show</a>
         <button class="btn btn-sm btn-secondary" type='button' data-exams='btn-edit'>Edit</button>
-        <a class="btn btn-sm btn-danger" data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="/patients/${exam.patientId}/exams/${exam.id}">Destroy</a>
+        <a class="btn btn-sm btn-danger" data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="delete" data-exams="btn-destroy" href="/patients/${exam.patientId}/exams/${exam.id}">Destroy</a>
       </div>
     </td>`
     return html += `</tr>`

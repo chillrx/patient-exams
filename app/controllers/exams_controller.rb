@@ -53,10 +53,7 @@ class ExamsController < ApplicationController
   # DELETE /exams/1.json
   def destroy
     @exam.destroy
-    respond_to do |format|
-      format.html { redirect_to patient_url(@patient), notice: 'Exam was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    render json: @exam
   end
 
   private
