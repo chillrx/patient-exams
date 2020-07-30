@@ -13,5 +13,12 @@ class Exam < ApplicationRecord
 
   def maxillary_depth_angle
     return nil if self.point_po.x.nil? or self.point_po.y.nil? or self.point_or.x.nil? or self.point_or.y.nil? or self.point_n.x.nil? or self.point_n.y.nil? or self.point_a.x.nil? or self.point_a.y.nil?
+  
+    ux = self.point_po.x - self.point_or.x
+    vx = self.point_n.x - self.point_a.x
+    uy = self.point_po.y - self.point_or.y
+    vy = self.point_n.y - self.point_a.y
+
+    (180 - ((Math.acos( ( (ux * vx) + (uy * vy) )  /  (Math.sqrt((ux ** 2) + (( uy ) ** 2) ) * Math.sqrt((vx  ** 2) + (vy ** 2)) ) ) * 180) / Math::PI)).round(2)
   end
 end
