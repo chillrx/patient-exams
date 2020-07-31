@@ -7,7 +7,9 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row" id="exam-row" data-point_po_x="<%= @exam.point_po.x %>" data-point_po_y="<%= @exam.point_po.y %>" 
+    data-point_or_x="<%= @exam.point_or.x %>" data-point_or_y="<%= @exam.point_or.y %>" data-point_n_x="<%= @exam.point_n.x %>" data-point_n_y="<%= @exam.point_n.y %>"
+    data-point_a_x="<%= @exam.point_a.x %>" data-point_a_y="<%= @exam.point_a.y %>">
   <div class="col-md-2">
     Point Po <br> <%= "x: #{@exam.point_po.x}, y: #{@exam.point_po.y}" %>
   </div>
@@ -27,6 +29,7 @@
 
 <div class="row">
   <div class="col-md-12" data-view3d='wrapper'>
+    <div id="container" class="d-flex justify-content-center mt-3 mb-3"></div>
   </div>
 </div>
 
